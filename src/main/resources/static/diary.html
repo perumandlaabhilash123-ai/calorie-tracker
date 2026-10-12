@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Food Tracker</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #182235;
+      font-family: Arial, sans-serif;
+    }
+    main {
+  width: 94%;
+  max-width: 1100px;
+  margin: 35px auto 70px;
+  padding: 30px;
+}
+    header, .meal-heading, .food-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    h1 {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+    h2 { font-size: 19px; margin: 0; }
+    .muted { color: #667085; }
+    /* Modern Calendar Design */
+#diaryDate {
+  width: 220px;
+  height: 48px;
+  padding: 10px 16px;
+  border: 1px solid #d9e2ef;
+  border-radius: 12px;
+  background: white;
+  color: #172b4d;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(20, 40, 80, 0.05);
+}
+
+#diaryDate:hover {
+  border-color: #1680f7;
+}
+
+#diaryDate:focus {
+  outline: none;
+  border-color: #1680f7;
+  box-shadow: 0 0 0 4px rgba(22, 128, 247, 0.12);
+}
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      margin-top: 18px;
+      box-shadow: 0 4px 18px #18223506;
+    }
+    .button {
+      display: inline-block;
+      background: #087bea;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      white-space: nowrap;
+    }
+    input {
+      padding: 12px;
+      border: 1px solid #d5dce6;
+      border-radius: 10px;
+      font: inherit;
+      margin-top: 8px;
+      max-width: 100%;
+    }
+    .calories {
+      font-size: 44px;
+      font-weight: bold;
+      color: #a66b00;
+      margin: 16px 0 4px;
+    }
+    .nutrients {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .nutrient {
+      background: #f4f7fb;
+      padding: 14px 8px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .nutrient strong { display: block; margin-bottom: 6px; }
+    .nutrient span { font-size: 13px; color: #667085; }
+    .food-row {
+      border-top: 1px solid #edf0f5;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+    .food-name { overflow-wrap: anywhere; }
+    .food-row small {
+      display: block;
+      color: #667085;
+      margin-top: 6px;
+    }
+    .food-calories {
+      color: #a66b00;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .food-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.edit-button {
+  background: #fff;
+  color: #087bea;
+  border: 1px solid #9ecbf5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background: #eef6ff;
+}
+
+.delete-button {
+  background: #fff;
+  color: #d92d20;
+  border: 1px solid #f1b5b0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background: #fff1f0;
+}
+
+.delete-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.goal-setting {
+  margin-top: 20px;
+}
+
+.goal-setting label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.goal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.goal-row input {
+  width: 140px;
+  margin-top: 0;
+}
+
+#updateGoalButton {
+  background: #087bea;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#updateGoalButton:hover {
+  background: #0668c7;
+}
+
+#goalMessage {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+.progress-container {
+  width: 100%;
+  height: 14px;
+  background: #e8edf3;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #087bea;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #667085;
+  text-align: right;
+}
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 34, 53, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.edit-modal[hidden] {
+  display: none;
+}
+
+.edit-modal-box {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(24, 34, 53, 0.2);
+}
+
+.edit-modal-box h2 {
+  margin-bottom: 8px;
+}
+
+.edit-modal-box label {
+  display: block;
+  margin-top: 18px;
+  font-weight: bold;
+}
+
+.edit-modal-box input,
+.edit-modal-box select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: 1px solid #d5dce6;
+  border-radius: 10px;
+  font: inherit;
+  background: white;
+}
+
+.edit-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+#cancelEditButton,
+#saveEditButton {
+  border-radius: 10px;
+  padding: 11px 16px;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#cancelEditButton {
+  background: white;
+  color: #667085;
+  border: 1px solid #d5dce6;
+}
+
+#saveEditButton {
+  background: #087bea;
+  color: white;
+  border: none;
+}
+
+#saveEditButton:hover {
+  background: #0668c7;
+}
+    @media (max-width: 480px) {
+      header { align-items: flex-start; }
+      h1 { font-size: 22px; }
+      .nutrients { grid-template-columns: repeat(2, 1fr); }
+      .card { padding: 18px; }
+      
+    }
+/* ===== MODERN WEEKLY CALENDAR ===== */
+
+.week-calendar {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 24px 0;
+  border: 1px solid #e8edf5;
+  box-shadow: 0 5px 20px rgba(20, 40, 80, 0.06);
+}
+
+.week-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.week-calendar-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #172b4d;
+}
+
+.week-calendar-header button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f4f7fb;
+  color: #172b4d;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.week-calendar-header button:hover {
+  background: #e7f0ff;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.calendar-day {
+  min-width: 0;
+  min-height: 82px;
+  border: 1px solid #e5eaf2;
+  border-radius: 14px;
+  background: #f8faff;
+  color: #172b4d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.calendar-day:hover {
+  background: #eaf3ff;
+  border-color: #087bea;
+}
+
+.calendar-day.selected {
+  background: #087bea;
+  color: white;
+  border-color: #087bea;
+}
+
+.calendar-day .day-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.calendar-day .day-number {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .week-calendar {
+    padding: 14px;
+  }
+
+  .calendar-days {
+    gap: 5px;
+  }
+
+  .calendar-day {
+    min-height: 65px;
+    border-radius: 10px;
+  }
+
+  .calendar-day .day-number {
+    font-size: 17px;
+  }
+
+  .calendar-day .day-name {
+    font-size: 11px;
+  }
+}
+/* ===== COPY YESTERDAY BUTTON ===== */
+
+.copy-meals-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+
+#copyYesterdayButton {
+  background: #087bea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(8, 123, 234, 0.15);
+  transition: background 0.2s, transform 0.2s;
+}
+
+#copyYesterdayButton:hover {
+  background: #0668c7;
+  transform: translateY(-2px);
+}
+
+#copyYesterdayButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#copyMealsMessage {
+  margin: 0;
+  font-size: 14px;
+}
+/* ===== MODERN FOOD DIARY HEADER ===== */
+
+.diary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 28px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(20, 40, 80, 0.06);
+  border: 1px solid #e8edf5;
+  margin-bottom: 28px;
+}
+
+.diary-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.diary-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.diary-brand-text h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: #172b4d;
+}
+
+.diary-brand-text p {
+  margin: 0;
+  font-size: 15px;
+  color: #667085;
+}
+
+.diary-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.weight-nav-button {
+  display: inline-block;
+  padding: 13px 20px;
+  border-radius: 12px;
+  background: #eef5ff;
+  color: #087bea;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.weight-nav-button:hover {
+  background: #dcecff;
+}
+
+.diary-header-actions .button {
+  padding: 13px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Responsive header */
+@media (max-width: 700px) {
+  .diary-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+  }
+
+  .diary-brand {
+    gap: 12px;
+  }
+
+  .diary-logo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .diary-brand-text h1 {
+    font-size: 23px;
+  }
+
+  .diary-header-actions {
+    width: 100%;
+  }
+
+  .diary-header-actions a {
+    flex: 1;
+    text-align: center;
+  }
+}
+/* ===== MODERN MEAL CARDS ===== */
+
+#meals .card {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 18px;
+  padding: 26px;
+  margin-top: 20px;
+  box-shadow: 0 5px 20px rgba(20, 40, 80, 0.05);
+}
+
+/* Meal heading */
+#meals .meal-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #edf1f7;
+}
+
+#meals .meal-heading h2 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #172b4d;
+  margin: 0;
+}
+
+/* Individual food entries */
+#meals .food-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f3f8;
+}
+
+#meals .food-row:last-child {
+  border-bottom: none;
+}
+
+/* Mobile-friendly layout */
+@media (max-width: 600px) {
+  #meals .card {
+    padding: 18px;
+  }
+
+  #meals .food-row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+/* ===== MODERN EDIT & DELETE BUTTONS ===== */
+
+#meals .edit-button,
+#meals .delete-button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Edit button */
+#meals .edit-button {
+  background: #eef5ff;
+  color: #087bea;
+  border: 1px solid #c9dfff;
+}
+
+#meals .edit-button:hover {
+  background: #087bea;
+  color: white;
+  border-color: #087bea;
+  transform: translateY(-2px);
+}
+
+/* Delete button */
+#meals .delete-button {
+  background: #fff1f1;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+#meals .delete-button:hover {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Keyboard accessibility */
+#meals .edit-button:focus-visible,
+#meals .delete-button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+/* Disabled buttons */
+#meals .edit-button:disabled,
+#meals .delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+/* ===== MODERN DAILY NUTRITION SUMMARY ===== */
+
+#summary {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 6px 24px rgba(20, 40, 80, 0.06);
+}
+
+#summary h2 {
+  font-size: 23px;
+  font-weight: 700;
+  color: #172b4d;
+  margin-bottom: 20px;
+}
+
+/* Calories consumed */
+#summary .calorie-progress {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#summary .calories {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #087bea;
+}
+
+#summary .goal-text {
+  font-size: 17px;
+  font-weight: 500;
+  color: #667085;
+}
+
+#remainingCalories {
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+/* Calorie progress bar */
+#summary .progress-container {
+  width: 100%;
+  height: 14px;
+  background: #eaf0f8;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 22px;
+}
+
+#summary .progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #087bea, #38bdf8);
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+#summary .progress-text {
+  text-align: right;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #667085;
+}
+
+/* Daily calorie goal */
+#summary .goal-setting {
+  margin-top: 26px;
+}
+
+#summary .goal-setting label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #172b4d;
+}
+
+#summary .goal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#summary #calorieGoal {
+  width: 160px;
+  height: 48px;
+  padding: 12px;
+  border: 1px solid #d9e2ef;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+#summary #updateGoalButton {
+  min-height: 48px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #087bea;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Nutrient cards */
+#summary .nutrients {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+#summary .nutrients > * {
+  background: #f4f7fc;
+  border: 1px solid #e8edf5;
+  border-radius: 14px;
+  padding: 20px 12px;
+  text-align: center;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  #summary {
+    padding: 20px;
+  }
+
+  #summary .calories {
+    font-size: 38px;
+  }
+
+  #summary .nutrients {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+} 
+/* ===== NUTRITION SPACING IMPROVEMENT ===== */
+
+#summary h2 {
+  margin-bottom: 12px;
+}
+
+#summary .calorie-progress {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+#summary .calories {
+  margin: 0;
+  padding: 0;
+}
+
+#summary #remainingCalories {
+  margin-top: 6px;
+}
+
+#summary .progress-container {
+  margin-top: 18px;
+}
+/* ===== MODERN NUTRIENT CARDS ===== */
+
+#summary .nutrient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: 110px;
+  padding: 20px 12px;
+
+  background: #f4f8ff;
+  border: 1px solid #e1eafa;
+  border-radius: 16px;
+
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+/* Nutrient amount */
+#summary .nutrient strong {
+  font-size: 23px;
+  font-weight: 700;
+  color: #172b4d;
+}
+
+/* Nutrient label */
+#summary .nutrient span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #667085;
+}
+
+/* Hover effect */
+#summary .nutrient:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(8, 123, 234, 0.08);
+}
+/* ===== DIARY SHARED HEADER ===== */
+
+body > .navbar {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: rgba(20, 25, 25, 0.94);
+}
+
+body > .navbar .nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+body > .navbar .logo,
+body > .navbar .nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+body > .navbar .nav-links a:hover,
+body > .navbar .nav-links a.active {
+  color: #9be477;
+}
+/* ===== FIX DIARY HEADER AND LOGO ===== */
+
+body > header.navbar {
+  width: 100%;
+  max-width: none;
+  min-height: 76px;
+  padding: 0 5%;
+  background: rgba(20, 25, 25, 0.94);
+}
+
+body > header.navbar .nav-container {
+  max-width: 1400px;
+  min-height: 76px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+body > header.navbar a.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+body > header.navbar .site-logo {
+  display: block;
+  width: 46px !important;
+  height: 46px !important;
+  max-width: 46px !important;
+  max-height: 46px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+body > header.navbar .nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+body > header.navbar .nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+body > header.navbar .nav-links a.active,
+body > header.navbar .nav-links a:hover {
+  color: #9be477;
+}
+
+@media (max-width: 850px) {
+  body > header.navbar {
+    padding: 14px 5%;
+  }
+
+  body > header.navbar .nav-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  body > header.navbar .nav-links {
+    justify-content: center;
+    gap: 16px;
+  }
+}
+  </style>
+</head>
+<body>
+  <header class="navbar">
+  <div class="nav-container">
+
+    <a href="/index.html" class="logo">
+      <img src="/image/dft-logo.png"
+           alt="Calories Web Logo"
+           class="site-logo">
+      <span>Calories Web</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/diary.html" class="active">My Diary</a>
+      <a href="/food-search.html">Add Food</a>
+      <a href="/weight.html">Weight</a>
+      <a href="/index.html#about">About</a>
+      <a href="/index.html#help">Help</a>
+    </nav>
+
+  </div>
+</header>
+<main>
+  <header class="diary-header">
+
+  <div class="diary-brand">
+
+    <img
+      src="/image/dft-logo.png"
+      alt="Daily Food Tracker Logo"
+      class="diary-logo"
+    >
+
+    <div class="diary-brand-text">
+      <h1>Daily Food Tracker</h1>
+      <p>Your daily food diary</p>
+    </div>
+
+  </div>
+
+  <div class="diary-header-actions">
+
+    <a href="/weight.html" class="weight-nav-button">
+      Track Weight →
+    </a>
+
+    <a href="/food-search.html" class="button">
+      + Add Food
+    </a>
+
+  </div>
+
+</header>
+
+  <label for="diaryDate">View date</label><br>
+  <input id="diaryDate" type="date" required>
+  <div class="week-calendar">
+  <div class="week-calendar-header">
+    <button type="button" id="previousWeek">←</button>
+    <h3 id="calendarMonth">October 2026</h3>
+    <button type="button" id="nextWeek">→</button>
+  </div>
+
+  <div id="calendarDays" class="calendar-days"></div>
+</div>
+
+  <p id="status" role="status"></p>
+
+  <section id="summary" class="card" hidden>
+    <h2>Daily nutrition</h2>
+    <div class="calorie-progress">
+  <span id="calorieTotal" class="calories"></span>
+  <span class="goal-text">
+  / <span id="goalDisplay">2000</span> kcal
+</span>
+</div>
+
+<div id="remainingCalories" class="muted"></div>
+<div class="progress-container">
+  <div id="calorieProgressBar" class="progress-bar"></div>
+</div>
+
+<div id="progressText" class="progress-text">0%</div>
+<div class="goal-setting">
+  <label for="calorieGoal">Daily calorie goal</label>
+
+  <div class="goal-row">
+    <input
+      id="calorieGoal"
+      type="number"
+      min="500"
+      max="10000"
+      step="50"
+      value="2000"
+    >
+
+    <button id="updateGoalButton" type="button">
+      Update Goal
+    </button>
+  </div>
+
+  <p id="goalMessage" class="muted"></p>
+</div>
+    <div id="nutrientTotals" class="nutrients"></div>
+    <p id="nutritionNote" class="muted"></p>
+  </section>
+
+  <div class="copy-meals-section">
+  <button id="copyYesterdayButton" type="button">
+    Copy Yesterday's Meals
+  </button>
+
+  <p id="copyMealsMessage" class="muted"></p>
+</div>
+
+<div id="meals"></div>
+  
+<div id="editModal" class="edit-modal" hidden>
+  <div class="edit-modal-box">
+
+    <h2>Edit Food</h2>
+
+    <p id="editFoodName" class="muted"></p>
+
+    <label for="editQuantity">Quantity (grams)</label>
+    <input
+      id="editQuantity"
+      type="number"
+      min="1"
+      step="1"
+    >
+
+    <label for="editMealType">Meal</label>
+    <select id="editMealType">
+      <option value="Breakfast">Breakfast</option>
+      <option value="Lunch">Lunch</option>
+      <option value="Snack">Snack</option>
+      <option value="Dinner">Dinner</option>
+    </select>
+
+    <div class="edit-modal-actions">
+      <button id="cancelEditButton" type="button">
+        Cancel
+      </button>
+
+      <button id="saveEditButton" type="button">
+        Save Changes
+      </button>
+    </div>
+
+    <p id="editMessage" class="muted"></p>
+
+  </div>
+</div> 
+</main>
+
+<script>
+  const diaryDate = document.getElementById("diaryDate");
+  const status = document.getElementById("status");
+  const summary = document.getElementById("summary");
+  const meals = document.getElementById("meals");
+  const editModal = document.getElementById("editModal");
+const editFoodName = document.getElementById("editFoodName");
+const editQuantity = document.getElementById("editQuantity");
+const editMealType = document.getElementById("editMealType");
+const cancelEditButton = document.getElementById("cancelEditButton");
+const saveEditButton = document.getElementById("saveEditButton");
+const editMessage = document.getElementById("editMessage");
+
+let foodBeingEdited = null;
+cancelEditButton.addEventListener("click", () => {
+
+  editModal.hidden = true;
+
+  foodBeingEdited = null;
+
+  editMessage.textContent = "";
+
+});
+saveEditButton.addEventListener("click", async () => {
+
+  if (!foodBeingEdited) return;
+
+  const food = foodBeingEdited;
+
+  const oldQuantity = String(food.quantity || "").trim();
+
+  if (!/^\d+(\.\d+)?\s*g$/i.test(oldQuantity)) {
+    editMessage.textContent =
+      "Only food quantities saved in grams can be edited.";
+    return;
+  }
+
+  const oldGrams = parseFloat(oldQuantity);
+  const newGrams = editQuantity.valueAsNumber;
+  const newMeal = editMealType.value;
+
+  if (!Number.isFinite(newGrams) || newGrams <= 0) {
+    editMessage.textContent =
+      "Please enter a valid quantity in grams.";
+    return;
+  }
+
+  if (!Number.isFinite(oldGrams) || oldGrams <= 0) {
+    editMessage.textContent = "Invalid original quantity.";
+    return;
+  }
+
+  const multiplier = newGrams / oldGrams;
+
+  const scaleNutrient = (value) =>
+    isKnown(value) ? value * multiplier : value;
+
+  const updatedFood = {
+    foodName: food.foodName,
+    mealType: newMeal,
+    quantity: newGrams + " g",
+    calories: scaleNutrient(food.calories),
+    protein: scaleNutrient(food.protein),
+    carbs: scaleNutrient(food.carbs),
+    fiber: scaleNutrient(food.fiber),
+    fat: scaleNutrient(food.fat),
+    entryDate: food.entryDate
+  };
+
+  saveEditButton.disabled = true;
+  saveEditButton.textContent = "Saving...";
+  editMessage.textContent = "";
+
+  try {
+    const response = await fetch(`/api/foods/${food.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedFood)
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not save changes.");
+    }
+
+    editModal.hidden = true;
+    foodBeingEdited = null;
+
+    await loadDiary();
+
+  } catch (error) {
+    editMessage.textContent = error.message;
+  } finally {
+    saveEditButton.disabled = false;
+    saveEditButton.textContent = "Save Changes";
+  }
+});
+  const calorieGoalInput = document.getElementById("calorieGoal");
+const updateGoalButton = document.getElementById("updateGoalButton");
+const goalMessage = document.getElementById("goalMessage");
+
+let dailyCalorieGoal =
+  Number(localStorage.getItem("dailyCalorieGoal")) || 2000;
+
+calorieGoalInput.value = dailyCalorieGoal;
+updateGoalButton.addEventListener("click", function () {
+
+  const newGoal = Number(calorieGoalInput.value);
+
+  if (!Number.isFinite(newGoal) || newGoal < 500 || newGoal > 10000) {
+    goalMessage.textContent =
+      "Enter a calorie goal between 500 and 10,000.";
+    return;
+  }
+
+  dailyCalorieGoal = newGoal;
+
+  localStorage.setItem(
+    "dailyCalorieGoal",
+    String(newGoal)
+  );
+
+  goalMessage.textContent =
+    "Goal updated to " + newGoal + " kcal.";
+
+  loadDiary();
+});
+
+  const today = new Date();
+  diaryDate.value = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+  ].join("-");
+
+  let latestRequest = 0;
+
+  function isKnown(value) {
+    return typeof value === "number" &&
+      Number.isFinite(value) && value >= 0;
+  }
+
+  function totalFor(entries, field) {
+    const known = entries.filter(food => isKnown(food[field]));
+    const total = known.reduce((sum, food) => sum + food[field], 0);
+
+    if (entries.length > 0 && known.length === 0) {
+      return "Unavailable";
+    }
+
+    return total.toFixed(1) +
+      (known.length < entries.length ? "*" : "");
+  }
+
+  async function loadDiary() {
+    const requestNumber = ++latestRequest;
+    summary.hidden = true;
+    meals.replaceChildren();
+
+    if (!diaryDate.value || !diaryDate.checkValidity()) {
+      status.textContent = "Choose a valid date.";
+      return;
+    }
+
+    const selectedDate = diaryDate.value;
+    status.textContent = "Loading your diary…";
+
+    try {
+      const response = await fetch("/api/foods", {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not load your food diary.");
+      }
+
+      const allFoods = await response.json();
+
+      if (requestNumber !== latestRequest) return;
+
+      if (!Array.isArray(allFoods)) {
+        throw new Error("Unexpected food data received.");
+      }
+
+      const foods = allFoods.filter(
+        food => food.entryDate === selectedDate
+      );
+
+      const calorieGoal = dailyCalorieGoal;
+      document.getElementById("goalDisplay").textContent =
+  calorieGoal;
+
+const knownCalories = foods.filter(food =>
+  isKnown(food.calories)
+);
+
+const caloriesLogged = knownCalories.reduce(
+  (sum, food) => sum + food.calories,
+  0
+);
+
+document.getElementById("calorieTotal").textContent =
+  caloriesLogged.toFixed(1);
+
+  const progressPercent =
+  calorieGoal > 0
+    ? Math.min((caloriesLogged / calorieGoal) * 100, 100)
+    : 0;
+
+document.getElementById("calorieProgressBar").style.width =
+  progressPercent + "%";
+
+document.getElementById("progressText").textContent =
+  Math.round(progressPercent) + "% of daily goal";
+
+const remaining = calorieGoal - caloriesLogged;
+
+document.getElementById("remainingCalories").textContent =
+  remaining >= 0
+    ? remaining.toFixed(1) + " kcal remaining"
+    : Math.abs(remaining).toFixed(1) + " kcal over your goal";
+
+      const nutrientTotals =
+        document.getElementById("nutrientTotals");
+      nutrientTotals.replaceChildren();
+
+      const nutrients = [
+        ["protein", "Protein"],
+        ["carbs", "Carbs"],
+        ["fiber", "Fiber"],
+        ["fat", "Fat"]
+      ];
+
+      for (const [field, label] of nutrients) {
+        const tile = document.createElement("div");
+        tile.className = "nutrient";
+
+        const amount = document.createElement("strong");
+        const name = document.createElement("span");
+        const total = totalFor(foods, field);
+
+        amount.textContent =
+          total === "Unavailable" ? total : total + " g";
+        name.textContent = label;
+
+        tile.append(amount, name);
+        nutrientTotals.append(tile);
+      }
+
+      const fields = ["calories", "protein", "carbs", "fiber", "fat"];
+      const hasMissing = foods.some(food =>
+        fields.some(field => !isKnown(food[field]))
+      );
+
+      document.getElementById("nutritionNote").textContent =
+        hasMissing
+          ? "* Partial total: some entries have missing nutrients. Unavailable means no values were recorded."
+          : "";
+
+      const mealTypes = ["Breakfast", "Lunch", "Snack", "Dinner"];
+      const groups = [...mealTypes, "Other"];
+
+      for (const mealType of groups) {
+        const entries = foods.filter(food =>
+          mealType === "Other"
+            ? !mealTypes.includes(food.mealType)
+            : food.mealType === mealType
+        );
+
+        if (mealType === "Other" && entries.length === 0) continue;
+
+        const card = document.createElement("section");
+        card.className = "card";
+
+        const heading = document.createElement("div");
+        heading.className = "meal-heading";
+
+        const title = document.createElement("h2");
+        title.textContent = mealType;
+
+        const total = document.createElement("span");
+        total.className = "food-calories";
+        const mealTotal = totalFor(entries, "calories");
+        total.textContent = mealTotal === "Unavailable"
+          ? mealTotal
+          : mealTotal + " kcal";
+
+        heading.append(title, total);
+        card.append(heading);
+
+        if (entries.length === 0) {
+          const empty = document.createElement("p");
+          empty.className = "muted";
+          empty.textContent = "No food logged yet.";
+          card.append(empty);
+        }
+
+        for (const food of entries) {
+          const row = document.createElement("div");
+          row.className = "food-row";
+
+          const details = document.createElement("div");
+          details.className = "food-name";
+
+          const name = document.createElement("strong");
+          name.textContent = food.foodName;
+
+          const quantity = document.createElement("small");
+          quantity.textContent = food.quantity || "";
+
+          const calories = document.createElement("span");
+calories.className = "food-calories";
+calories.textContent = isKnown(food.calories)
+  ? food.calories.toFixed(1) + " kcal"
+  : "Unavailable";
+
+  const editButton = document.createElement("button");
+editButton.type = "button";
+editButton.textContent = "Edit";
+editButton.className = "edit-button";
+
+editButton.addEventListener("click", () => {
+
+  const grams = parseFloat(food.quantity);
+
+  if (!Number.isFinite(grams) || grams <= 0) {
+    alert("This food cannot be edited by grams.");
+    return;
+  }
+
+  foodBeingEdited = food;
+
+  editFoodName.textContent = food.foodName;
+  editQuantity.value = grams;
+  editMealType.value = food.mealType || "Breakfast";
+  editMessage.textContent = "";
+
+  editModal.hidden = false;
+});
+
+const deleteButton = document.createElement("button");
+deleteButton.type = "button";
+deleteButton.textContent = "Delete";
+deleteButton.className = "delete-button";
+
+deleteButton.addEventListener("click", async () => {
+
+  const confirmed = confirm(
+    `Delete ${food.foodName} from your diary?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  deleteButton.disabled = true;
+  deleteButton.textContent = "Deleting...";
+
+  try {
+    const response = await fetch(`/api/foods/${food.id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not delete this food.");
+    }
+
+    await loadDiary();
+
+  } catch (error) {
+    status.textContent = error.message;
+    deleteButton.disabled = false;
+    deleteButton.textContent = "Delete";
+  }
+});
+
+details.append(name, quantity);
+
+const actions = document.createElement("div");
+actions.className = "food-actions";
+actions.append(calories, editButton, deleteButton);
+
+row.append(details, actions);
+card.append(row);
+        }
+
+        meals.append(card);
+      }
+
+      summary.hidden = false;
+      status.textContent = foods.length === 0
+        ? "No entries for this date. Use Add food to get started."
+        : "";
+    } catch (error) {
+      if (requestNumber !== latestRequest) return;
+      status.textContent = error.message;
+    }
+  }
+
+  diaryDate.addEventListener("change", loadDiary);
+  loadDiary();
+
+  // Copy yesterday's meals into the selected diary date
+document.getElementById("copyYesterdayButton")
+  .addEventListener("click", async () => {
+
+    const selectedDate = diaryDate.value;
+    const message = document.getElementById("copyMealsMessage");
+    const button = document.getElementById("copyYesterdayButton");
+
+    if (!selectedDate) {
+      message.textContent = "Please select a date first.";
+      return;
+    }
+
+    const yesterday = new Date(selectedDate + "T12:00:00");
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const yesterdayDate = [
+      yesterday.getFullYear(),
+      String(yesterday.getMonth() + 1).padStart(2, "0"),
+      String(yesterday.getDate()).padStart(2, "0")
+    ].join("-");
+
+    button.disabled = true;
+    message.textContent = "Copying meals...";
+
+    try {
+      const response = await fetch("/api/foods", {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not load food entries.");
+      }
+
+      const allFoods = await response.json();
+
+      const yesterdayFoods = allFoods.filter(
+        food => food.entryDate === yesterdayDate
+      );
+
+      if (yesterdayFoods.length === 0) {
+        message.textContent = "No meals found for the previous day.";
+        return;
+      }
+
+      const confirmed = confirm(
+        `Copy ${yesterdayFoods.length} food entries from ${yesterdayDate} to ${selectedDate}?`
+      );
+
+      if (!confirmed) {
+        message.textContent = "Copy cancelled.";
+        return;
+      }
+
+      let copied = 0;
+
+      for (const food of yesterdayFoods) {
+        const newFood = {
+          foodName: food.foodName,
+          quantity: food.quantity,
+          mealType: food.mealType,
+          entryDate: selectedDate,
+          calories: food.calories,
+          protein: food.protein,
+          carbs: food.carbs,
+          fiber: food.fiber,
+          fat: food.fat
+        };
+
+        const saveResponse = await fetch("/api/foods", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newFood)
+        });
+
+        if (!saveResponse.ok) {
+          throw new Error(`Copied ${copied} entries before an error. Check your diary before retrying.`);
+        }
+
+        copied++;
+      }
+
+      await loadDiary();
+
+      message.textContent =
+        `${copied} food entries copied successfully!`;
+
+    } catch (error) {
+      message.textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
+
+  });
+  // ===== WEEKLY CALENDAR =====
+
+const calendarDays = document.getElementById("calendarDays");
+const calendarMonth = document.getElementById("calendarMonth");
+const previousWeek = document.getElementById("previousWeek");
+const nextWeek = document.getElementById("nextWeek");
+
+// Convert YYYY-MM-DD into a local date
+function parseCalendarDate(value) {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+// Convert local date back to YYYY-MM-DD
+function formatCalendarDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function renderWeekCalendar() {
+  if (!diaryDate.value) return;
+
+  const selectedDate = parseCalendarDate(diaryDate.value);
+
+  const monday = new Date(selectedDate);
+  const dayOfWeek = (monday.getDay() + 6) % 7;
+
+  monday.setDate(monday.getDate() - dayOfWeek);
+
+  calendarMonth.textContent = selectedDate.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric"
+  });
+
+  calendarDays.replaceChildren();
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+
+    const dateValue = formatCalendarDate(date);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "calendar-day";
+
+    if (dateValue === diaryDate.value) {
+      button.classList.add("selected");
+    }
+
+    const dayName = document.createElement("span");
+    dayName.className = "day-name";
+    dayName.textContent = date.toLocaleDateString("en-US", {
+      weekday: "short"
+    });
+
+    const dayNumber = document.createElement("span");
+    dayNumber.className = "day-number";
+    dayNumber.textContent = date.getDate();
+
+    button.append(dayName, dayNumber);
+
+    button.addEventListener("click", () => {
+      diaryDate.value = dateValue;
+      diaryDate.dispatchEvent(new Event("change", { bubbles: true }));
+      renderWeekCalendar();
+    });
+
+    calendarDays.appendChild(button);
+  }
+}
+
+function changeCalendarWeek(days) {
+  if (!diaryDate.value) return;
+
+  const date = parseCalendarDate(diaryDate.value);
+  date.setDate(date.getDate() + days);
+
+  diaryDate.value = formatCalendarDate(date);
+  diaryDate.dispatchEvent(new Event("change", { bubbles: true }));
+  renderWeekCalendar();
+}
+
+previousWeek.addEventListener("click", () => {
+  changeCalendarWeek(-7);
+});
+
+nextWeek.addEventListener("click", () => {
+  changeCalendarWeek(7);
+});
+
+diaryDate.addEventListener("change", renderWeekCalendar);
+
+renderWeekCalendar();
+</script>
+<nav class="bottom-nav" aria-label="Main navigation">
+  <a href="/diary.html">Diary</a>
+  <a href="/food-search.html">Add food</a>
+  <a href="/weight.html">Weight</a>
+</nav>
+</body>
+</html>

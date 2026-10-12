@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weight Tracker</title>
+  <link rel="stylesheet" href="/css/style.css?v=2">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #182235;
+      font-family: Arial, sans-serif;
+    }
+    main {
+      max-width: 650px;
+      margin: auto;
+      padding: 24px 16px;
+    }
+    a { color: #087bea; }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      margin-top: 20px;
+      box-shadow: 0 4px 18px #18223508;
+    }
+    h1 { margin-bottom: 8px; }
+    h2 { font-size: 20px; }
+    label { display: block; margin-top: 18px; }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: 1px solid #d5dce6;
+      border-radius: 12px;
+      font: inherit;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 22px;
+      border: 0;
+      border-radius: 12px;
+      background: #087bea;
+      color: white;
+      font: inherit;
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.6; }
+    .muted { color: #667085; }
+    #latestWeight {
+      color: #087bea;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      padding: 14px 4px;
+      border-bottom: 1px solid #edf0f5;
+    }
+    th:last-child, td:last-child { text-align: right; }
+    /* ===== MODERN WEIGHT TRACKER DESIGN ===== */
+
+main {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* Back navigation link */
+main > a {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #087bea;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+main > a:hover {
+  text-decoration: underline;
+}
+
+/* Page heading */
+main > h1 {
+  font-size: 34px;
+  font-weight: 700;
+  color: #172b4d;
+  margin: 0 0 10px;
+}
+
+main > .muted {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* Modern white cards */
+.card {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 20px;
+  padding: 30px;
+  margin-top: 24px;
+  box-shadow: 0 5px 20px rgba(20, 40, 80, 0.06);
+}
+
+.card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #172b4d;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  main {
+    padding: 24px 16px 50px;
+  }
+
+  main > h1 {
+    font-size: 28px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
+/* ===== BACK TO DIARY BUTTON ===== */
+
+main > a.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: #087bea;
+  color: #ffffff;
+
+  padding: 12px 20px;
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+
+  margin-bottom: 26px;
+  transition: background 0.2s ease;
+}
+
+main > a.back-button:hover {
+  background: #0668c7;
+  text-decoration: none;
+}
+/* ===== WEIGHT PAGE SHARED HEADER FIX ===== */
+
+body > .navbar {
+  background: rgba(20, 25, 25, 0.94);
+}
+
+body > .navbar .logo,
+body > .navbar .nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+body > .navbar .nav-links a:hover,
+body > .navbar .nav-links a.active {
+  color: #9be477;
+}
+  </style>
+</head>
+<body>
+  <header class="navbar">
+  <div class="nav-container">
+    <a href="/index.html" class="logo">
+      <img src="/image/dft-logo.png" alt="Calories Web Logo" class="site-logo">
+      <span>Calories Web</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/index.html">Home</a>
+      <a href="/diary.html">My Diary</a>
+      <a href="/food-search.html">Add Food</a>
+      <a href="/weight.html" class="active">Weight</a>
+      <a href="/index.html#about">About</a>
+      <a href="/index.html#help">Help</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <a href="/diary.html" class="back-button">
+  ← Back to Diary
+</a>
+  <h1>Weight tracker</h1>
+  <p class="muted">Record your weight and follow your history.</p>
+
+  <section class="card">
+    <h2>Add a measurement</h2>
+
+    <form id="weightForm">
+      <label for="weightKg">Weight in kilograms</label>
+      <input id="weightKg" type="number"
+             min="0.1" max="1000" step="0.1"
+             placeholder="For example, 65.5" required>
+
+      <label for="weightDate">Measurement date</label>
+      <input id="weightDate" type="date" required>
+
+      <button id="saveButton" type="submit">Save weight</button>
+    </form>
+
+    <p id="saveMessage" role="status"></p>
+  </section>
+
+  <section class="card">
+    <h2>Latest measurement</h2>
+    <p id="latestWeight">—</p>
+    <p id="latestDate" class="muted"></p>
+
+    <div class="weight-change-section">
+  <h2>Weight Change</h2>
+  <p id="weightChange">—</p>
+  <p id="weightChangeMessage" class="muted">
+    Your weight change will appear here.
+  </p>
+</div>
+<div class="weight-goal-section">
+
+  <h2>Target Weight</h2>
+
+  <label for="targetWeight">Enter your target weight (kg)</label>
+
+  <input
+    type="number"
+    id="targetWeight"
+    min="1"
+    step="0.1"
+    placeholder="Example: 62.0"
+  >
+
+  <button type="button" id="saveTargetButton">
+    Save Target
+  </button>
+
+  <p id="targetWeightDisplay" class="muted">
+    No target weight set.
+  </p>
+
+  <p id="weightRemaining" class="muted"></p>
+
+  <div class="weight-goal-progress">
+
+  <h3>Weight Goal Progress</h3>
+
+  <div class="weight-progress-track">
+    <div id="weightGoalProgressBar"></div>
+  </div>
+
+  <p id="weightGoalProgressText" class="muted">
+    Set a target weight to see your progress.
+  </p>
+
+</div>
+
+</div>
+    <h2>Weight Progress</h2>
+
+<div class="weight-chart-container">
+  <canvas id="weightChart"></canvas>
+</div>
+
+<p id="chartMessage" class="muted"></p>
+
+    <h2>Weight history</h2>
+    <p id="historyMessage" role="status"></p>
+
+    <table id="historyTable" hidden>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody id="historyRows"></tbody>
+    </table>
+  </section>
+  <!-- Edit Weight Popup -->
+<div id="editWeightModal" class="edit-modal" hidden>
+
+  <div class="edit-modal-box">
+
+    <h2>Edit Weight</h2>
+
+    <label for="editWeightKg">Weight (kg)</label>
+    <input
+      type="number"
+      id="editWeightKg"
+      min="1"
+      step="0.1"
+    >
+
+    <label for="editWeightDate">Date</label>
+    <input
+      type="date"
+      id="editWeightDate"
+    >
+
+    <div class="edit-modal-actions">
+
+      <button type="button" id="cancelWeightEdit">
+        Cancel
+      </button>
+
+      <button type="button" id="saveWeightEdit">
+        Save Changes
+      </button>
+
+    </div>
+
+    <p id="editWeightMessage" class="muted"></p>
+
+  </div>
+
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const weightChartCanvas = document.getElementById("weightChart");
+
+const weightChart = new Chart(weightChartCanvas, {
+  type: "line",
+
+  data: {
+    labels: [],
+
+    datasets: [{
+      label: "Weight (kg)",
+      data: [],
+      borderColor: "#087bea",
+      backgroundColor: "rgba(8, 123, 234, 0.1)",
+      borderWidth: 3,
+      tension: 0.3,
+      fill: true,
+      pointRadius: 5
+    }]
+  },
+
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Weight (kg)"
+        }
+      }
+    }
+  }
+});
+function updateWeightChart(entries) {
+
+  const sortedEntries = [...entries].sort((a, b) =>
+    String(a.entryDate).localeCompare(String(b.entryDate))
+  );
+
+  const dates = sortedEntries.map(entry => entry.entryDate);
+
+  const weights = sortedEntries.map(entry => entry.weightKg);
+
+  weightChart.data.labels = dates;
+
+  weightChart.data.datasets[0].data = weights;
+
+  weightChart.update();
+}
+
+function updateWeightChange(entries) {
+
+  const weightChange = document.getElementById("weightChange");
+  const weightChangeMessage = document.getElementById("weightChangeMessage");
+
+  if (!Array.isArray(entries) || entries.length < 2) {
+    weightChange.textContent = "—";
+    weightChangeMessage.textContent =
+      "Add at least two measurements to see your progress.";
+    return;
+  }
+
+  const sortedEntries = [...entries].sort((a, b) =>
+    String(a.entryDate).localeCompare(String(b.entryDate))
+  );
+
+  const firstWeight = Number(sortedEntries[0].weightKg);
+  const latestWeight = Number(sortedEntries[sortedEntries.length - 1].weightKg);
+
+  const difference = latestWeight - firstWeight;
+
+  if (difference < 0) {
+    weightChange.textContent = difference.toFixed(1) + " kg";
+    weightChangeMessage.textContent = "You have lost weight.";
+  } else if (difference > 0) {
+    weightChange.textContent = "+" + difference.toFixed(1) + " kg";
+    weightChangeMessage.textContent = "You have gained weight.";
+  } else {
+    weightChange.textContent = "0.0 kg";
+    weightChangeMessage.textContent = "Your weight has stayed the same.";
+  }
+}
+function updateWeightRemaining(entries) {
+
+  const weightRemaining =
+    document.getElementById("weightRemaining");
+
+  const savedTarget = localStorage.getItem("targetWeight");
+
+  if (savedTarget === null || savedTarget === "") {
+    weightRemaining.textContent = "Set a target weight first.";
+    return;
+  }
+
+  if (!Array.isArray(entries) || entries.length === 0) {
+    weightRemaining.textContent = "Add a weight measurement first.";
+    return;
+  }
+
+  const sortedEntries = [...entries].sort((a, b) =>
+    String(a.entryDate).localeCompare(String(b.entryDate))
+  );
+
+  const currentWeight =
+    Number(sortedEntries[sortedEntries.length - 1].weightKg);
+
+  const targetWeight = Number(savedTarget);
+
+  if (!Number.isFinite(currentWeight) ||
+      !Number.isFinite(targetWeight) ||
+      targetWeight <= 0) {
+    weightRemaining.textContent = "Invalid weight information.";
+    return;
+  }
+
+  const difference = currentWeight - targetWeight;
+
+  if (Math.abs(difference) < 0.05) {
+    weightRemaining.textContent = "You have reached your target weight!";
+  } else if (difference > 0) {
+    weightRemaining.textContent =
+      difference.toFixed(1) + " kg to lose to reach your target.";
+  } else {
+    weightRemaining.textContent =
+      Math.abs(difference).toFixed(1) +
+      " kg to gain to reach your target.";
+  }
+}
+function updateWeightGoalProgress(entries) {
+
+  const progressBar =
+    document.getElementById("weightGoalProgressBar");
+
+  const progressText =
+    document.getElementById("weightGoalProgressText");
+
+  const savedTarget = localStorage.getItem("targetWeight");
+
+  if (!savedTarget || !Array.isArray(entries) || entries.length === 0) {
+    progressBar.style.width = "0%";
+    progressText.textContent =
+      "Set a target weight and add measurements.";
+    return;
+  }
+
+  const sortedEntries = [...entries].sort((a, b) =>
+    String(a.entryDate).localeCompare(String(b.entryDate))
+  );
+
+  const startingWeight = Number(sortedEntries[0].weightKg);
+
+  const currentWeight =
+    Number(sortedEntries[sortedEntries.length - 1].weightKg);
+
+  const targetWeight = Number(savedTarget);
+
+  if (!Number.isFinite(startingWeight) ||
+      !Number.isFinite(currentWeight) ||
+      !Number.isFinite(targetWeight) ||
+      targetWeight <= 0) {
+    progressBar.style.width = "0%";
+    progressText.textContent = "Invalid weight information.";
+    return;
+  }
+
+  const totalChange = targetWeight - startingWeight;
+
+  if (totalChange === 0) {
+    progressBar.style.width = currentWeight === targetWeight ? "100%" : "0%";
+    progressText.textContent =
+      currentWeight === targetWeight
+        ? "100% of your goal completed!"
+        : "Your target equals your starting weight.";
+    return;
+  }
+
+  const completedChange = currentWeight - startingWeight;
+
+  const percentage = Math.max(
+    0,
+    Math.min(100, (completedChange / totalChange) * 100)
+  );
+
+  progressBar.style.width = percentage.toFixed(1) + "%";
+
+  progressText.textContent =
+    percentage.toFixed(1) + "% of your weight goal completed.";
+}
+  const form = document.getElementById("weightForm");
+  const weightInput = document.getElementById("weightKg");
+  const dateInput = document.getElementById("weightDate");
+  const saveButton = document.getElementById("saveButton");
+  const saveMessage = document.getElementById("saveMessage");
+  const historyMessage = document.getElementById("historyMessage");
+  const historyTable = document.getElementById("historyTable");
+  const historyRows = document.getElementById("historyRows");
+  const latestWeight = document.getElementById("latestWeight");
+  const latestDate = document.getElementById("latestDate");
+  // Target Weight Elements
+const targetWeightInput = document.getElementById("targetWeight");
+const saveTargetButton = document.getElementById("saveTargetButton");
+const targetWeightDisplay = document.getElementById("targetWeightDisplay");
+
+// Load saved target weight
+const savedTargetWeight = localStorage.getItem("targetWeight");
+
+if (savedTargetWeight !== null) {
+  targetWeightInput.value = savedTargetWeight;
+  targetWeightDisplay.textContent =
+    "Your target weight: " + savedTargetWeight + " kg";
+}
+
+// Save target weight
+saveTargetButton.addEventListener("click", () => {
+
+  const target = Number(targetWeightInput.value);
+
+  if (targetWeightInput.value.trim() === "" ||
+      !Number.isFinite(target) || target <= 0) {
+    alert("Please enter a valid target weight.");
+    return;
+  }
+
+  localStorage.setItem("targetWeight", target);
+
+  targetWeightDisplay.textContent =
+    "Your target weight: " + target + " kg";
+
+    loadWeights();
+
+});
+// Close Edit Weight popup
+document.getElementById("cancelWeightEdit")
+  .addEventListener("click", () => {
+
+    document.getElementById("editWeightModal").hidden = true;
+
+    window.weightBeingEdited = null;
+
+  });
+  // Save edited weight
+document.getElementById("saveWeightEdit")
+  .addEventListener("click", async () => {
+
+    const entry = window.weightBeingEdited;
+
+    if (!entry) return;
+
+    const newWeight = Number(
+      document.getElementById("editWeightKg").value
+    );
+
+    const newDate =
+      document.getElementById("editWeightDate").value;
+
+    const message =
+      document.getElementById("editWeightMessage");
+
+    if (!Number.isFinite(newWeight) || newWeight <= 0 || !newDate) {
+      message.textContent = "Please enter a valid weight and date.";
+      return;
+    }
+
+    const saveButton = document.getElementById("saveWeightEdit");
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+    message.textContent = "";
+
+    try {
+      const response = await fetch(`/api/weights/${entry.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          weightKg: newWeight,
+          entryDate: newDate
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not update weight entry.");
+      }
+
+      document.getElementById("editWeightModal").hidden = true;
+      window.weightBeingEdited = null;
+
+      await loadWeights();
+
+      
+
+    } catch (error) {
+      message.textContent = error.message;
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = "Save Changes";
+    }
+
+  });
+
+  const today = new Date();
+  dateInput.value = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+  ].join("-");
+
+  async function loadWeights() {
+    historyMessage.textContent = "Loading history…";
+    historyTable.hidden = true;
+    historyRows.replaceChildren();
+    latestWeight.textContent = "—";
+    latestDate.textContent = "";
+
+    try {
+      const response = await fetch("/api/weights", {
+        cache: "no-store"
+      });
+
+
+
+      if (!response.ok) {
+        throw new Error("Could not load weight history.");
+      }
+
+      const entries = await response.json();
+      updateWeightChart(entries);
+      updateWeightChange(entries);
+      updateWeightRemaining(entries);
+      updateWeightGoalProgress(entries);
+
+      if (!Array.isArray(entries)) {
+        throw new Error("Unexpected weight data received.");
+      }
+
+      if (entries.length === 0) {
+        historyMessage.textContent = "No measurements saved yet.";
+        return;
+      }
+
+      // The backend returns the most recent measurement date first.
+      latestWeight.textContent = entries[0].weightKg.toFixed(1) + " kg";
+      latestDate.textContent = entries[0].entryDate;
+
+      for (const entry of entries) {
+        const row = document.createElement("tr");
+        const dateCell = document.createElement("td");
+        const weightCell = document.createElement("td");
+
+       dateCell.textContent = entry.entryDate;
+weightCell.textContent = entry.weightKg.toFixed(1) + " kg";
+
+// Create Action column
+const actionCell = document.createElement("td");
+
+// Create Edit button
+const editButton = document.createElement("button");
+editButton.addEventListener("click", () => {
+
+  // Fill the popup with the selected weight
+  document.getElementById("editWeightKg").value = entry.weightKg;
+
+  // Fill the popup with the selected date
+  document.getElementById("editWeightDate").value = entry.entryDate;
+
+  // Clear previous messages
+  document.getElementById("editWeightMessage").textContent = "";
+
+  // Remember which weight entry is being edited
+  window.weightBeingEdited = entry;
+
+  // Open the popup
+  document.getElementById("editWeightModal").hidden = false;
+
+});
+
+editButton.type = "button";
+editButton.textContent = "Edit";
+editButton.className = "edit-weight-button";
+
+// Create Delete button
+const deleteButton = document.createElement("button");
+deleteButton.type = "button";
+deleteButton.textContent = "Delete";
+deleteButton.className = "delete-weight-button";
+deleteButton.addEventListener("click", async () => {
+
+  const confirmed = confirm(
+    "Are you sure you want to delete this weight entry?"
+  );
+
+  if (!confirmed) return;
+
+  deleteButton.disabled = true;
+  deleteButton.textContent = "Deleting...";
+
+  try {
+
+    const response = await fetch(`/api/weights/${entry.id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not delete weight entry.");
+    }
+
+    await loadWeights();
+
+  } catch (error) {
+
+    alert(error.message);
+
+    deleteButton.disabled = false;
+    deleteButton.textContent = "Delete";
+
+  }
+
+});
+
+// Add Delete button to Action column
+actionCell.append(editButton, deleteButton);
+
+// Add all three columns to the row
+row.append(dateCell, weightCell, actionCell);
+
+// Add row to Weight History table
+historyRows.append(row);
+      }
+
+      historyTable.hidden = false;
+      historyMessage.textContent = "";
+    } catch (error) {
+      historyMessage.textContent = error.message;
+    }
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    const weight = weightInput.valueAsNumber;
+    if (!Number.isFinite(weight)) return;
+
+    saveButton.disabled = true;
+    saveMessage.textContent = "Saving…";
+
+    try {
+      const response = await fetch("/api/weights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          weightKg: weight,
+          entryDate: dateInput.value
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Save failed (${response.status}).`);
+      }
+
+      saveMessage.textContent = "Weight saved successfully!";
+      weightInput.value = "";
+      await loadWeights();
+    } catch (error) {
+      saveMessage.textContent =
+        error.message + " Check weight history before trying again.";
+      await loadWeights();
+    } finally {
+      saveButton.disabled = false;
+    }
+  });
+
+  loadWeights();
+</script>
+</body>
+</html>

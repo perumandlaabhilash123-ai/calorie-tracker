@@ -1,0 +1,1200 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+}
+
+
+/* ---------------- NAVBAR ---------------- */
+
+.navbar {
+    height: 70px;
+    background: #252525;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+}
+
+.logo {
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.navbar nav {
+    display: flex;
+    gap: 30px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.navbar a:hover {
+    color: #7ac943;
+}
+
+
+/* ---------------- HERO ---------------- */
+
+.hero {
+    min-height: 580px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    color: white;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.48),
+            rgba(0, 0, 0, 0.48)
+        ),
+        url("/image/Image_logo.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.hero-content {
+    width: min(850px, 90%);
+}
+
+.hero h1 {
+    font-size: 56px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 21px;
+    margin-bottom: 35px;
+}
+
+.hero form {
+    display: flex;
+    width: min(700px, 100%);
+    margin: auto;
+}
+
+.hero input {
+    flex: 1;
+
+    padding: 20px;
+
+    border: none;
+
+    font-size: 18px;
+
+    border-radius: 6px 0 0 6px;
+}
+
+.hero button {
+    border: none;
+
+    padding: 0 30px;
+
+    background: #49a942;
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    border-radius: 0 6px 6px 0;
+}
+
+.hero button:hover {
+    background: #398c34;
+}
+
+
+/* ---------------- FEATURES ---------------- */
+
+.features {
+    padding: 70px 8%;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.feature-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.feature-card {
+    width: 300px;
+
+    padding: 30px;
+
+    background: #f5f7f5;
+
+    border-radius: 12px;
+}
+
+.feature-card h3 {
+    color: #398c34;
+}
+
+
+/* ---------------- HOW IT WORKS ---------------- */
+
+.how-it-works {
+    background: #f1f5f1;
+
+    text-align: center;
+
+    padding: 70px 20px;
+}
+
+.how-it-works h2 {
+    font-size: 32px;
+}
+
+.steps {
+    margin-top: 30px;
+
+    font-size: 21px;
+
+    word-spacing: 10px;
+}
+
+
+/* ---------------- FOOTER ---------------- */
+
+footer {
+    background: #252525;
+    color: white;
+
+    text-align: center;
+
+    padding: 40px 20px;
+}
+
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 700px) {
+
+    .navbar {
+        height: auto;
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .navbar nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero input,
+    .hero button {
+        border-radius: 6px;
+        padding: 18px;
+    }
+
+    .feature-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* =========================================
+   FOOD SEARCH PAGE
+   ========================================= */
+
+.food-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 30px 100px;
+}
+
+.food-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.food-header h1 {
+    font-size: 42px;
+    margin-bottom: 12px;
+    color: #1f2937;
+}
+
+.food-header p {
+    font-size: 18px;
+    color: #6b7280;
+}
+
+/* Search bar */
+
+.food-page #searchForm {
+    display: flex;
+    max-width: 750px;
+    margin: 0 auto 20px;
+    gap: 10px;
+}
+
+.food-page #query {
+    flex: 1;
+    padding: 16px 18px;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+
+.food-page #query:focus {
+    border-color: #4caf50;
+}
+
+.food-page #searchButton {
+    padding: 16px 30px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.food-page #searchButton:hover {
+    background: #3f9843;
+}
+
+/* Search status message */
+
+.food-page #message {
+    max-width: 750px;
+    margin: 15px auto;
+    color: #4b5563;
+}
+
+/* Search results */
+
+.food-page #results {
+    max-width: 850px;
+    margin: 25px auto 0;
+}
+
+.food-page #results article {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.food-page #results article h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+.food-page #results article p {
+    color: #6b7280;
+    margin-bottom: 18px;
+}
+
+.food-page #results article button {
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 11px 18px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.food-page #results article button:hover {
+    background: #3f9843;
+}
+
+/* Selected food / portion panel */
+
+.food-page #portionPanel {
+    max-width: 750px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.food-page #portionPanel label {
+    display: block;
+    font-weight: 600;
+    margin: 15px 0 7px;
+}
+
+.food-page #portionPanel input,
+.food-page #portionPanel select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+}
+
+.food-page #saveFoodButton {
+    margin-top: 15px;
+    padding: 12px 22px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.food-page #saveFoodButton:hover {
+    background: #3f9843;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .food-page {
+        padding: 35px 20px 80px;
+    }
+
+    .food-header h1 {
+        font-size: 32px;
+    }
+
+    .food-page #searchForm {
+        flex-direction: column;
+    }
+
+    .food-page #searchButton {
+        width: 100%;
+    }
+}
+
+/* Weight Progress Chart */
+
+.weight-chart-container {
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  position: relative;
+}
+
+#weightChart {
+  width: 100%;
+  height: 100%;
+}
+/* Target Weight Section */
+
+.weight-goal-section {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.weight-goal-section h2 {
+  margin-bottom: 15px;
+  color: #182235;
+}
+
+.weight-goal-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+#targetWeight {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d5dce6;
+  border-radius: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#saveTargetButton {
+  margin-top: 12px;
+  padding: 12px 20px;
+  background: #087bea;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#saveTargetButton:hover {
+  background: #0668c7;
+}
+
+#targetWeightDisplay {
+  margin-top: 15px;
+}
+
+#weightRemaining {
+  margin-top: 8px;
+  font-weight: 600;
+}
+/* Weight Goal Progress Bar */
+
+.weight-goal-progress {
+  margin-top: 25px;
+}
+
+.weight-goal-progress h3 {
+  margin-bottom: 12px;
+  color: #182235;
+}
+
+.weight-progress-track {
+  width: 100%;
+  height: 14px;
+  background: #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#weightGoalProgressBar {
+  width: 0%;
+  height: 100%;
+  background: #16a34a;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+#weightGoalProgressText {
+  margin-top: 10px;
+  font-weight: 600;
+}
+/* Delete Weight Button */
+
+.delete-weight-button {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.delete-weight-button:hover {
+  background-color: #dc2626;
+}
+
+.delete-weight-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Edit Weight Button */
+
+.edit-weight-button {
+  background-color: #087bea;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.edit-weight-button:hover {
+  background-color: #0668c7;
+}
+
+.edit-weight-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Edit Weight Popup Buttons */
+
+#cancelWeightEdit,
+#saveWeightEdit {
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#cancelWeightEdit {
+  background: white;
+  color: #667085;
+  border: 1px solid #d5dce6;
+}
+
+#saveWeightEdit {
+  background: #087bea;
+  color: white;
+  border: none;
+}
+
+#saveWeightEdit:hover {
+  background: #0668c7;
+}
+
+#saveWeightEdit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Edit Weight Popup */
+
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 34, 53, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.edit-modal[hidden] {
+  display: none;
+}
+
+.edit-modal-box {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(24, 34, 53, 0.2);
+}
+
+.edit-modal-box label {
+  display: block;
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+.edit-modal-box input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: 1px solid #d5dce6;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.edit-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+/* ====================================
+   DAILY FOOD TRACKER - MODERN DESIGN
+==================================== */
+
+body:has(#meals) {
+    background: #f4f7fb;
+    color: #172b4d;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Main content container */
+body:has(#meals) main {
+    width: min(1100px, 94%);
+    max-width: 1100px;
+    margin: 35px auto 70px;
+}
+
+/* Main heading */
+body:has(#meals) h1 {
+    font-size: 34px;
+    font-weight: 700;
+    color: #172b4d;
+    letter-spacing: -0.5px;
+}
+
+/* Smaller description */
+body:has(#meals) .muted {
+    color: #718096;
+    line-height: 1.5;
+}
+
+/* Daily nutrition section */
+body:has(#meals) #summary {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 6px 25px rgba(20, 40, 80, 0.06);
+}
+/* ===== MODERN FOOD SEARCH PAGE ===== */
+
+.food-page {
+  width: min(1100px, 94%);
+  max-width: 1100px;
+  margin: 40px auto 80px;
+  padding: 0;
+}
+
+/* Page heading */
+.food-header {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 26px;
+  box-shadow: 0 5px 20px rgba(20, 40, 80, 0.06);
+}
+
+.food-header h1 {
+  font-size: 34px;
+  font-weight: 700;
+  color: #172b4d;
+  margin: 0 0 12px;
+}
+
+.food-header p {
+  color: #667085;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Search box */
+#searchForm {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px;
+  background: white;
+  border: 1px solid #e8edf5;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(20, 40, 80, 0.05);
+}
+
+#searchForm #query {
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+  padding: 14px 18px;
+  border: 1px solid #d9e2ef;
+  border-radius: 12px;
+  background: #f8faff;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+#searchForm #query:focus {
+  outline: none;
+  border-color: #087bea;
+  box-shadow: 0 0 0 4px rgba(8, 123, 234, 0.1);
+}
+
+#searchButton {
+  height: 52px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 12px;
+  background: #087bea;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#searchButton:hover {
+  background: #0668c7;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .food-header {
+    padding: 22px;
+  }
+
+  .food-header h1 {
+    font-size: 27px;
+  }
+
+  #searchForm {
+    flex-direction: column;
+  }
+
+  #searchForm #query,
+  #searchButton {
+    width: 100%;
+  }
+}
+/* ===== FOOD SEARCH BUTTON DESIGN ===== */
+
+/* Search button */
+.food-page #searchButton {
+  background: #087bea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.food-page #searchButton:hover {
+  background: #0668c7;
+}
+
+/* Select this food buttons */
+.food-page #results button {
+  background: #087bea;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.food-page #results button:hover {
+  background: #0668c7;
+}
+/* ===== FIX FOOD RESULT BUTTON COLORS ===== */
+
+body .food-page #results article button {
+  background-color: #087bea;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+body .food-page #results article button:hover {
+  background-color: #0668c7;
+}
+/* ===== MODERN NAVIGATION BAR ===== */
+
+.navbar {
+  width: 100%;
+  height: auto;
+  min-height: 76px;
+  padding: 0 5%;
+  background: #252525;
+}
+
+.navbar .nav-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar .nav-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.navbar .nav-links a {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar .nav-links a:hover {
+  color: #60a5fa;
+}
+
+/* Mobile responsive */
+@media (max-width: 850px) {
+  .navbar {
+    padding: 18px 5%;
+  }
+
+  .navbar .nav-container {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .navbar .nav-links {
+    justify-content: center;
+    gap: 16px;
+  }
+}
+/* ===== MODERN FOOD SEARCH RESULT CARDS ===== */
+
+.food-page #results {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.food-page #results article {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 4px 16px rgba(20, 40, 80, 0.05);
+
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.food-page #results article:hover {
+  transform: translateY(-3px);
+  border-color: #bfdbfe;
+  box-shadow: 0 8px 24px rgba(20, 40, 80, 0.09);
+}
+
+.food-page #results article h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #172b4d;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.food-page #results article p {
+  font-size: 14px;
+  color: #667085;
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+/* Mobile-friendly results */
+@media (max-width: 600px) {
+  .food-page #results article {
+    padding: 18px;
+  }
+
+  .food-page #results article h2 {
+    font-size: 17px;
+  }
+}
+/* ===== SELECTED FOOD NUTRITION PANEL ===== */
+
+.food-page #portionPanel {
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 26px auto;
+  box-shadow: 0 6px 24px rgba(20, 40, 80, 0.07);
+}
+
+.food-page #portionPanel[hidden] {
+  display: none;
+}
+
+.food-page #selectedName {
+  font-size: 24px;
+  font-weight: 700;
+  color: #172b4d;
+  margin: 0 0 24px;
+}
+
+.food-page #portionPanel label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #172b4d;
+  margin: 16px 0 8px;
+}
+
+.food-page #portionPanel input,
+.food-page #portionPanel select {
+  width: 100%;
+  max-width: 380px;
+  height: 48px;
+  padding: 10px 14px;
+  border: 1px solid #d9e2ef;
+  border-radius: 12px;
+  background: #f8faff;
+  color: #172b4d;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.food-page #portionPanel input:focus,
+.food-page #portionPanel select:focus {
+  outline: none;
+  border-color: #087bea;
+  box-shadow: 0 0 0 4px rgba(8, 123, 234, 0.1);
+}
+
+.food-page #portionPanel > p {
+  color: #667085;
+  line-height: 1.6;
+}
+
+.food-page #nutritionTotals {
+  background: #f4f8ff;
+  border: 1px solid #e1eafa;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin: 22px 0;
+}
+
+.food-page #nutritionTotals p {
+  padding: 10px 0;
+  margin: 0;
+  border-bottom: 1px solid #e1eafa;
+  font-weight: 600;
+  color: #172b4d;
+}
+
+.food-page #nutritionTotals p:last-child {
+  border-bottom: none;
+}
+
+.food-page #saveFoodButton {
+  background: #087bea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 26px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+.food-page #saveFoodButton:hover {
+  background: #0668c7;
+}
+
+.food-page #saveFoodButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .food-page #portionPanel {
+    padding: 20px;
+  }
+
+  .food-page #portionPanel input,
+  .food-page #portionPanel select {
+    max-width: 100%;
+  }
+}
+/* ===== SAVE FOOD STATUS MESSAGE ===== */
+
+.food-page #saveMessage {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+.food-page #saveMessage:not(:empty) {
+  padding: 12px 16px;
+  background: #f4f7fc;
+  border: 1px solid #d9e2ef;
+  border-radius: 10px;
+  color: #172b4d;
+}
+/* ===== SHARED CALORIES WEB HEADER ===== */
+
+.navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e5eaf2;
+  box-shadow: 0 3px 14px rgba(20, 40, 80, 0.06);
+  padding: 0 5%;
+  width: 100%;
+  min-height: 82px;
+}
+
+.navbar .nav-container {
+  max-width: 1400px;
+  min-height: 82px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #172b4d;
+  font-size: 23px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar .site-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.navbar .nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.navbar .nav-links a {
+  color: #344054;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar .nav-links a:hover,
+.navbar .nav-links a.active {
+  color: #087bea;
+}
+
+@media (max-width: 850px) {
+  .navbar {
+    padding: 14px 5%;
+  }
+
+  .navbar .nav-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .navbar .nav-links {
+    justify-content: center;
+    gap: 16px;
+  }
+}
+/* ===== CALORIES WEB DARK NAVIGATION ===== */
+
+.navbar {
+  background: rgba(20, 25, 25, 0.94);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: none;
+  min-height: 70px;
+  padding: 0 5%;
+}
+
+.navbar .nav-container {
+  min-height: 70px;
+}
+
+.navbar .logo {
+  color: #ffffff;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.navbar .site-logo {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+
+.navbar .nav-links a {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.navbar .nav-links a:hover,
+.navbar .nav-links a.active {
+  color: #9be477;
+}
+
+/* Homepage only: overlay navigation on the hero */
+body:has(.hero) .navbar {
+  position: relative;
+  z-index: 10;
+  margin-bottom: -70px;
+  background: rgba(20, 25, 25, 0.75);
+}
+/* ===== FIX ADD FOOD HEADER ===== */
+
+body:has(.food-page) .navbar .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+body:has(.food-page) .navbar .site-logo {
+  display: block;
+  width: 46px !important;
+  height: 46px !important;
+  max-width: 46px !important;
+  max-height: 46px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+body:has(.food-page) .navbar .nav-links a.active {
+  color: #9be477;
+  font-weight: 600;
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search Foods</title>
+  <link rel="stylesheet" href="/css/style.css">
+  
+</head>
+<body>
+    <header class="navbar">
+    <div class="nav-container">
+
+        <a href="/index.html" class="logo">
+            Calories Web
+        </a>
+
+        <nav class="nav-links">
+            <a href="/index.html">Home</a>
+            <a href="/diary.html">My Diary</a>
+            <a href="/food-search.html">Add Food</a>
+            <a href="/weight.html">Weight</a>
+            <a href="/index.html#about">About</a>
+            <a href="/index.html#help">Help</a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="food-page">
+
+    <div class="food-header">
+
+  <h1>Find your food</h1>
+  <p>   Search foods, check nutrition information,
+            and add them to your daily diary.</p>
+
+</div>
+
+  <form id="searchForm">
+    <input id="query"
+     aria-label="Food name"
+           placeholder="Enter a food…" maxlength="100" required>
+    <button id="searchButton" type="submit">Search</button>
+  </form>
+
+  <p id="message" role="status"></p>
+  <article id="portionPanel" hidden>
+  <h2 id="selectedName"></h2>
+
+  <label for="grams">Amount eaten in grams</label>
+  <input id="grams" type="number"
+         min="0.1" max="10000" step="0.1" value="100">
+
+  <p>Use the edible weight—for example, banana without its peel.</p>
+  <div id="nutritionTotals" aria-live="polite"></div>
+  <small>Nutrition source: USDA FoodData Central</small>
+  <p>
+  <label for="mealType">Meal</label>
+  <select id="mealType">
+    <option>Breakfast</option>
+    <option>Lunch</option>
+    <option>Snack</option>
+    <option>Dinner</option>
+  </select>
+</p>
+
+<p>
+  <label for="entryDate">Date</label>
+  <input id="entryDate" type="date" required>
+</p>
+
+<button id="saveFoodButton" type="button">Save food</button>
+<p id="saveMessage" role="status"></p>
+</article>
+  <div id="results"></div>
+
+  </main>
+
+  <script>
+    const saveFoodButton = document.getElementById("saveFoodButton");
+const saveMessage = document.getElementById("saveMessage");
+const entryDate = document.getElementById("entryDate");
+
+const today = new Date();
+entryDate.value = [
+  today.getFullYear(),
+  String(today.getMonth() + 1).padStart(2, "0"),
+  String(today.getDate()).padStart(2, "0")
+].join("-");
+
+saveFoodButton.addEventListener("click", async () => {
+  saveMessage.textContent = "";
+
+  if (!selectedFood) {
+    saveMessage.textContent = "Select a food first.";
+    return;
+  }
+
+  const grams = gramsInput.valueAsNumber;
+
+  if (!Number.isFinite(grams) || !gramsInput.checkValidity()) {
+    saveMessage.textContent =
+      "Enter a weight between 0.1 and 10,000 grams.";
+    return;
+  }
+
+  if (!entryDate.value || !entryDate.checkValidity()) {
+    saveMessage.textContent = "Choose a valid date.";
+    return;
+  }
+
+  const servingUnit =
+    String(selectedFood.servingSizeUnit || "").toLowerCase();
+
+  if (selectedFood.dataType === "Branded" &&
+      servingUnit !== "g" && servingUnit !== "grm") {
+    saveMessage.textContent =
+      "Choose a food with supported gram-based nutrition.";
+    return;
+  }
+
+  function portionValue(ids, unit) {
+    const value = getNutrient(ids, unit);
+    return value === null
+      ? null
+      : Number((value * grams / 100).toFixed(2));
+  }
+
+  const calories = portionValue([2048, 2047, 1008], "KCAL");
+  const protein = portionValue([1003], "G");
+
+  // The current backend requires calories and protein.
+  if (calories === null || protein === null) {
+    saveMessage.textContent =
+      "This food is missing calories or protein. Choose another match.";
+    return;
+  }
+
+  const food = {
+    foodName: selectedFood.description,
+    quantity: `${grams} g`,
+    mealType: document.getElementById("mealType").value,
+    entryDate: entryDate.value,
+    calories: calories,
+    protein: protein,
+    carbs: portionValue([1005], "G"),
+    fiber: portionValue([1079], "G"),
+    fat: portionValue([1004], "G")
+  };
+
+  saveFoodButton.disabled = true;
+  saveMessage.textContent = "Saving…";
+
+  try {
+    const response = await fetch("/api/foods", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(food)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Save failed (${response.status}).`);
+    }
+
+    saveMessage.textContent = "Food saved successfully!";
+    selectedFood = null;
+    document.getElementById("selectedName").textContent =
+      "Saved! Select another food to continue.";
+    nutritionTotals.replaceChildren();
+  } catch (error) {
+    saveMessage.textContent =
+      error.message + " Check /api/foods before retrying to avoid duplicates.";
+  } finally {
+    saveFoodButton.disabled = false;
+  }
+});
+
+    const form = document.getElementById("searchForm");
+    const query = document.getElementById("query");
+    const button = document.getElementById("searchButton");
+    const message = document.getElementById("message");
+    const results = document.getElementById("results");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const foodName = query.value.trim();
+      if (!foodName) {
+        message.textContent = "Please enter a food name.";
+        return;
+      }
+
+      button.disabled = true;
+      results.replaceChildren();
+      message.textContent = "Searching…";
+
+      try {
+        const response = await fetch(
+          "/api/nutrition/search?query=" + encodeURIComponent(foodName)
+        );
+
+        if (!response.ok) {
+          throw new Error("Search failed. Please try again.");
+        }
+
+        const data = await response.json();
+        const foods = data.foods || [];
+
+        message.textContent = foods.length
+          ? "Check the food description and brand carefully."
+          : "No foods found. Try another name.";
+
+        for (const food of foods) {
+          const card = document.createElement("article");
+          const title = document.createElement("h2");
+          const details = document.createElement("p");
+
+          title.textContent = food.description;
+          details.textContent = [
+            food.brandName || food.brandOwner,
+            food.dataType
+          ].filter(Boolean).join(" • ");
+
+          const selectButton = document.createElement("button");
+selectButton.type = "button";
+selectButton.textContent = "Select this food";
+
+selectButton.addEventListener("click", () => {
+  selectedFood = food;
+  document.getElementById("selectedName").textContent =
+    food.description;
+
+  document.getElementById("portionPanel").hidden = false;
+  updateNutrition();
+
+  document.getElementById("portionPanel").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
+
+card.append(title, details, selectButton);
+results.append(card);
+        }
+      } catch (error) {
+        message.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+      
+    });
+    let selectedFood = null;
+
+const gramsInput = document.getElementById("grams");
+gramsInput.addEventListener("input", updateNutrition);
+const nutritionTotals = document.getElementById("nutritionTotals");
+
+gramsInput.addEventListener("input", updateNutrition);
+
+function getNutrient(ids, unit) {
+  const nutrients = selectedFood.foodNutrients || [];
+
+  for (const id of ids) {
+    const nutrient = nutrients.find(item =>
+      item.nutrientId === id &&
+      String(item.unitName).toUpperCase() === unit &&
+      typeof item.value === "number" &&
+      Number.isFinite(item.value) &&
+      item.value >= 0
+    );
+
+    if (nutrient) {
+      return nutrient.value;
+    }
+  }
+
+  return null;
+}
+
+function updateNutrition() {
+  nutritionTotals.replaceChildren();
+
+  if (!selectedFood) return;
+
+  const grams = gramsInput.valueAsNumber;
+
+  if (!Number.isFinite(grams) || !gramsInput.checkValidity()) {
+    nutritionTotals.textContent =
+      "Enter a weight between 0.1 and 10,000 grams.";
+    return;
+  }
+
+  // Liquid branded products may use a milliliter basis.
+  // Do not assume that milliliters equal grams.
+  const servingUnit =
+    String(selectedFood.servingSizeUnit || "").toLowerCase();
+
+  if (selectedFood.dataType === "Branded" &&
+      servingUnit !== "g" && servingUnit !== "grm") {
+    nutritionTotals.textContent =
+      "This product needs its serving units checked before calculating grams. Choose another food for now.";
+    return;
+  }
+
+  const nutrients = [
+    ["Calories", getNutrient([2048, 2047, 1008], "KCAL"), "kcal"],
+    ["Protein", getNutrient([1003], "G"), "g"],
+    ["Carbs", getNutrient([1005], "G"), "g"],
+    ["Fiber", getNutrient([1079], "G"), "g"],
+    ["Fat", getNutrient([1004], "G"), "g"]
+  ];
+
+  for (const [label, per100g, unit] of nutrients) {
+    const row = document.createElement("p");
+
+    row.textContent = per100g === null
+      ? `${label}: Not available`
+      : `${label}: ${(per100g * grams / 100).toFixed(1)} ${unit}`;
+
+    nutritionTotals.append(row);
+  }
+}
+// Get search text sent from homepage
+const urlParams = new URLSearchParams(window.location.search);
+const homeQuery = urlParams.get("query");
+
+if (homeQuery) {
+    query.value = homeQuery;
+    form.requestSubmit();
+}
+  </script>
+  
+</body> 
+</html>
+
